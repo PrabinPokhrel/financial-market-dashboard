@@ -1,7 +1,7 @@
 # Financial Market Dashboard
 
 Real-time financial market analytics dashboard built on a modern data 
-stack — Alpha Vantage API for live data, Supabase PostgreSQL for storage, 
+stack - Alpha Vantage API for live data, Supabase PostgreSQL for storage, 
 Python pipeline for transformation, and Streamlit for visualisation.
 
 ## Dashboard Features
