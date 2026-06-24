@@ -4,6 +4,12 @@ Real-time financial market analytics dashboard built on a modern data
 stack - Alpha Vantage API for live data, Supabase PostgreSQL for storage, 
 Python pipeline for transformation, and Streamlit for visualisation.
 
+## Live Demo
+
+https://prabin-financial-dashboard.streamlit.app
+
+Upload any stock CSV (OHLCV format) to explore price trends, candlestick charts, moving averages, daily returns and volatility analysis. Live portfolio mode requires local Supabase setup.
+
 ## Dashboard Features
 
 - Portfolio Overview: live price KPI cards with daily change, price trend 
