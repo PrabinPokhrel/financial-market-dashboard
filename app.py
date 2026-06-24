@@ -30,7 +30,11 @@ COLORS = {
 
 @st.cache_resource
 def get_engine():
-    return create_engine(SUPABASE_URL)
+    return create_engine(
+        SUPABASE_URL,
+        connect_args={"sslmode": "require"},
+        pool_pre_ping=True
+    )
 
 @st.cache_data(ttl=3600)
 def load_supabase(query):
