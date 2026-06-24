@@ -78,7 +78,7 @@ with st.sidebar:
     data_mode = st.radio(
         "Choose data source:",
         ["Live Portfolio (Supabase)", "Upload CSV"],
-        index=0
+        index=1
     )
 
     st.divider()
