@@ -286,8 +286,16 @@ if data_mode == "Live Portfolio (Supabase)":
             st.plotly_chart(fig7, use_container_width=True)
 
     except Exception as e:
-        st.error(f"Could not connect to database: {e}")
-        st.info("Switch to Upload CSV mode in the sidebar to use the app without a database connection.")
+        st.warning("Live Portfolio mode requires a local database connection.")
+        st.info("""
+**To use Live Portfolio mode locally:**
+1. Clone the repo
+2. Add your Supabase credentials to `.env`
+3. Run `python src/ingest.py` to load stock data
+4. Run `streamlit run app.py`
+
+**Try Upload CSV mode instead**  upload any stock CSV from Yahoo Finance or Stooq to explore the full dashboard.
+        """)
 
 # ── UPLOAD MODE ───────────────────────────────────────────────────────────────
 
