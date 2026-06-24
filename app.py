@@ -2,15 +2,15 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import sqlite3
 import os
 import re
 import tempfile
-
 load_dotenv()
-SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_URL         = os.getenv("SUPABASE_URL")
+SUPABASE_PROJECT_URL = os.getenv("SUPABASE_PROJECT_URL", "https://lfrrmwtrenkrfzseccew.supabase.co")
+SUPABASE_ANON_KEY    = os.getenv("SUPABASE_ANON_KEY")
 
 st.set_page_config(
     page_title="Financial Market Dashboard",
@@ -28,19 +28,16 @@ COLORS = {
 
 # ── Data loading helpers ──────────────────────────────────────────────────────
 
+
 @st.cache_resource
-def get_engine():
-    return create_engine(
-        SUPABASE_URL,
-        connect_args={"sslmode": "require"},
-        pool_pre_ping=True
-    )
+def get_supabase_client():
+    return create_client(SUPABASE_PROJECT_URL, SUPABASE_ANON_KEY)
 
 @st.cache_data(ttl=3600)
-def load_supabase(query):
-    engine = get_engine()
-    with engine.connect() as conn:
-        return pd.read_sql(query, conn)
+def load_supabase(table_name):
+    client   = get_supabase_client()
+    response = client.table(table_name).select("*").execute()
+    return pd.DataFrame(response.data)
 
 def load_uploaded_csv(uploaded_file):
     df = pd.read_csv(uploaded_file, encoding='latin-1')
@@ -101,10 +98,10 @@ with st.sidebar:
 if data_mode == "Live Portfolio (Supabase)":
 
     try:
-        raw_df  = load_supabase("SELECT * FROM raw_stock_prices ORDER BY ticker, date")
-        ret_df  = load_supabase("SELECT * FROM mart_daily_returns ORDER BY ticker, date")
-        ma_df   = load_supabase("SELECT * FROM mart_moving_averages ORDER BY ticker, date")
-        vol_df  = load_supabase("SELECT * FROM mart_volatility ORDER BY ticker, date")
+        raw_df  = load_supabase("raw_stock_prices")
+        ret_df  = load_supabase("mart_daily_returns")
+        ma_df   = load_supabase("mart_moving_averages")
+        vol_df  = load_supabase("mart_volatility")
 
         TICKERS = sorted(raw_df["ticker"].unique().tolist())
 
